@@ -7,6 +7,10 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.Spinner;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -53,6 +57,38 @@ public class SpeechFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+    }
+
+    private ArrayAdapter yearAdapter;
+    private Spinner yearSpinner;
+    private ArrayAdapter eraAdapter;
+    private Spinner eraSpinner;
+
+    private String speechDay = "";
+    private String speechYear = "";
+    private String speechEra = "";
+
+    @Override
+    public void onActivityCreated(Bundle b) {
+        super.onActivityCreated(b);
+
+        final RadioGroup speechGroup = (RadioGroup) getView().findViewById(R.id.speechGroup);
+        yearSpinner = (Spinner) getView().findViewById(R.id.yearSpinner);
+        eraSpinner = (Spinner) getView().findViewById(R.id.speechEraSpinner);
+
+        speechGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                RadioButton speechButton = (RadioButton) getView().findViewById(checkedId);
+                speechDay = speechButton.getText().toString();
+
+                yearAdapter = ArrayAdapter.createFromResource(getActivity(), R.array.year, android.R.layout.simple_spinner_dropdown_item);
+                yearSpinner.setAdapter(yearAdapter);
+
+                eraAdapter = ArrayAdapter.createFromResource(getActivity(), R.array.era, android.R.layout.simple_spinner_dropdown_item);
+                eraSpinner.setAdapter(eraAdapter);
+            }
+        });
     }
 
     @Override
