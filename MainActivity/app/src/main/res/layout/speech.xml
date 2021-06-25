@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+
+    <Button
+        android:id="@+id/addButton"
+        android:layout_width="80dp"
+        android:layout_height="40dp"
+        android:layout_gravity="center"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:background="@color/design_default_color_primary"
+        android:gravity="center"
+        android:text="추가"
+        android:textColor="#ffffff"
+        android:textSize="18dp" />
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:background="@color/design_default_color_primary">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="말씀 제목"
+                    android:id="@+id/speechTitle"
+                    android:layout_gravity="center"
+                    android:padding="3dp"
+                    android:textColor="#ffffff"
+                    android:textStyle="bold"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="말씀 ID"
+                    android:id="@+id/speechID"
+                    android:layout_gravity="center"
+                    android:padding="3dp"
+                    android:textColor="#ffffff"
+                    android:textStyle="bold"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="말씀 요일"
+                    android:id="@+id/speechDay"
+                    android:layout_gravity="center"
+                    android:padding="3dp"
+                    android:textColor="#ffffff"
+                    android:textStyle="bold"/>
+            </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:background="#ffffff">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="말씀이"
+                android:id="@+id/speechPerson"
+                android:layout_gravity="center"
+                android:padding="3dp"
+                android:textColor="#000000"
+                android:textStyle="bold"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="날짜"
+                android:id="@+id/speechYear"
+                android:layout_gravity="center"
+                android:padding="3dp"
+                android:textColor="#000000" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="구절"
+                android:id="@+id/speechEra"
+                android:layout_gravity="center"
+                android:padding="3dp"
+                android:textColor="#000000" />
+        </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:background="#ffffff">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="말씀 요약"
+                    android:id="@+id/speechContent"
+                    android:layout_gravity="center"
+                    android:padding="3dp"
+                    android:textColor="#000000" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="링크"
+                    android:id="@+id/speechLink"
+                    android:layout_gravity="center"
+                    android:padding="3dp"
+                    android:textColor="#f92a3f" />
+            </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

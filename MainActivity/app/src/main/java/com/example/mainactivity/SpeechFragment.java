@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
@@ -24,6 +25,8 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -78,8 +81,10 @@ public class SpeechFragment extends Fragment {
     private Spinner eraSpinner;
 
     private String speechDay = "";
-    private String speechYear = "";
-    private String speechEra = "";
+
+   private ListView speechListView;
+   private SpeechListAdapter adapter;
+   private List<Speech> speechList;
 
     @Override
     public void onActivityCreated(Bundle b) {
@@ -103,6 +108,11 @@ public class SpeechFragment extends Fragment {
 
             }
         });
+
+        speechListView = (ListView) getView().findViewById(R.id.speechListView);
+        speechList = new ArrayList<Speech>();
+        adapter = new SpeechListAdapter(getContext().getApplicationContext(), speechList);
+        speechListView.setAdapter(adapter);
 
         Button searchButton = (Button) getView().findViewById(R.id.searchButton);
         searchButton.setOnClickListener(new View.OnClickListener() {
@@ -162,12 +172,41 @@ public class SpeechFragment extends Fragment {
         @Override
         public void onPostExecute(String result) {
             try {
-                AlertDialog dialog;
-                AlertDialog.Builder builder = new AlertDialog.Builder(SpeechFragment.this.getContext());
-                dialog = builder.setMessage(result)
-                        .setPositiveButton("확인", null)
-                        .create();
-                dialog.show();
+                speechList.clear();
+                JSONObject jsonObject = new JSONObject(result);
+                JSONArray jsonArray = jsonObject.getJSONArray("response");
+                int count = 0;
+                String speechID;
+                String speechDay;
+                String speechYear;
+                String speechEra;
+                String speechTitle;
+                String speechPerson;
+                String speechContent;
+                String speechLink;
+                while (count < jsonArray.length()) {
+                    JSONObject object = jsonArray.getJSONObject(count);
+                    speechID = object.getString("speechID");
+                    speechDay = object.getString("speechDay");
+                    speechYear = object.getString("speechYear");
+                    speechEra = object.getString("speechEra");
+                    speechTitle = object.getString("speechTitle");
+                    speechPerson = object.getString("speechPerson");
+                    speechContent = object.getString("speechContent");
+                    speechLink = object.getString("speechLink");
+                    Speech speech = new Speech(speechID, speechDay, speechYear, speechEra, speechTitle, speechPerson, speechContent, speechLink);
+                    speechList.add(speech);
+                    adapter.notifyDataSetChanged();
+                    count++;
+                }
+                if (count == 0) {
+                    AlertDialog dialog;
+                    AlertDialog.Builder builder = new AlertDialog.Builder(SpeechFragment.this.getActivity());
+                    dialog = builder.setMessage("조회된 말씀이 없습니다.")
+                            .setPositiveButton("확인", null)
+                            .create();
+                    dialog.show();
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }
