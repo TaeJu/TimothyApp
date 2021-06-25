@@ -1,5 +1,7 @@
 package com.example.mainactivity;
 
+import android.app.AlertDialog;
+import android.os.AsyncTask;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -8,9 +10,20 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLEncoder;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -87,6 +100,15 @@ public class SpeechFragment extends Fragment {
 
                 eraAdapter = ArrayAdapter.createFromResource(getActivity(), R.array.era, android.R.layout.simple_spinner_dropdown_item);
                 eraSpinner.setAdapter(eraAdapter);
+
+            }
+        });
+
+        Button searchButton = (Button) getView().findViewById(R.id.searchButton);
+        searchButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new BackgroundTask().execute();
             }
         });
     }
@@ -96,5 +118,59 @@ public class SpeechFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_speech, container, false);
+    }
+
+    class BackgroundTask extends AsyncTask<Void, Void, String> {
+        String target;
+
+        @Override
+        protected void onPreExecute() {
+            try {
+                target = "https://xown17.cafe24.com/SpeechList.php?speechDay=" + URLEncoder.encode(speechDay, "UTF-8") + "&speechYear=" + URLEncoder.encode(yearSpinner.getSelectedItem().toString().substring(0, 4), "UTF-8") + "&speechEra=" + URLEncoder.encode(eraSpinner.getSelectedItem().toString(), "UTF-8");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        @Override
+        protected String doInBackground(Void... voids) {
+            try {
+                URL url = new URL(target);
+                HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
+                InputStream inputStream = httpURLConnection.getInputStream();
+                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+                String temp;
+                StringBuilder stringBuilder = new StringBuilder();
+                while((temp = bufferedReader.readLine()) != null) {
+                    stringBuilder.append(temp + "\n");
+                }
+                bufferedReader.close();
+                inputStream.close();
+                httpURLConnection.disconnect();
+                return stringBuilder.toString().trim();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        public void onProgressUpdate(Void... values) {
+            super.onProgressUpdate();
+        }
+
+        @Override
+        public void onPostExecute(String result) {
+            try {
+                AlertDialog dialog;
+                AlertDialog.Builder builder = new AlertDialog.Builder(SpeechFragment.this.getContext());
+                dialog = builder.setMessage(result)
+                        .setPositiveButton("확인", null)
+                        .create();
+                dialog.show();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 }

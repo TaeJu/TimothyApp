@@ -6,13 +6,18 @@
         <item>없음</item>
     </string-array>
     <string-array name="year">
-        <item>2020</item>
-        <item>2021</item>
+        <item>2020년도</item>
+        <item>2021년도</item>
         <item>전체</item>
     </string-array>
     <string-array name="era">
         <item>구약</item>
         <item>신약</item>
+        <item>전체</item>
+    </string-array>
+    <string-array name="era2">
+        <item>신약</item>
+        <item>구약</item>
         <item>전체</item>
     </string-array>
 </resources>
