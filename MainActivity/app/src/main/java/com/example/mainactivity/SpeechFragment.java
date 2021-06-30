@@ -111,7 +111,7 @@ public class SpeechFragment extends Fragment {
 
         speechListView = (ListView) getView().findViewById(R.id.speechListView);
         speechList = new ArrayList<Speech>();
-        adapter = new SpeechListAdapter(getContext().getApplicationContext(), speechList);
+        adapter = new SpeechListAdapter(getContext().getApplicationContext(), speechList, this);
         speechListView.setAdapter(adapter);
 
         Button searchButton = (Button) getView().findViewById(R.id.searchButton);

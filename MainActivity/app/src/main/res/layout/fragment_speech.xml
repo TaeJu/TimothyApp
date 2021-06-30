@@ -76,7 +76,8 @@
             android:layout_height="match_parent"
             android:id="@+id/speechListView"
             android:dividerHeight="10dp"
-            android:divider="#ffffff">
+            android:divider="#ffffff"
+            android:padding="5dp">
         </ListView>
     </LinearLayout>
     
