@@ -1,16 +1,36 @@
 package com.example.mainactivity;
 
+import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
+
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLEncoder;
+import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -59,10 +79,173 @@ public class RideFragment extends Fragment {
         }
     }
 
+    private AlertDialog dialog;
+
+    @Override
+    public void onActivityCreated(Bundle b) {
+        super.onActivityCreated(b);
+
+        Button registerCancelRiderButton = (Button) getView().findViewById(R.id.registerRiderCancel);
+        registerCancelRiderButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final String userID = MainActivity.userID;
+
+                Response.Listener<String> responseListener = new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            JSONObject jsonResponse = new JSONObject(response);
+                            boolean success = jsonResponse.getBoolean("success");
+                            if (success) {
+                                android.app.AlertDialog dialog;
+                                android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(RideFragment.this.getActivity());
+                                dialog = builder.setMessage("라이더 등록 취소.")
+                                        .setPositiveButton("확인", null)
+                                        .create();
+                                dialog.show();
+                            } else {
+                                android.app.AlertDialog dialog;
+                                android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(RideFragment.this.getActivity());
+                                dialog = builder.setMessage("오류.")
+                                        .setPositiveButton("확인", null)
+                                        .create();
+                                dialog.show();
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                };
+                RiderCancelRequest riderCancelRequest = new RiderCancelRequest(userID, responseListener);
+                RequestQueue queue = Volley.newRequestQueue(RideFragment.this.getActivity());
+                queue.add(riderCancelRequest);
+            }
+        });
+
+        Button registerRiderButton = (Button) getView().findViewById(R.id.registerRider);
+        registerRiderButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final String userID = MainActivity.userID;
+
+                Response.Listener<String> responseListener = new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            JSONObject jsonResponse = new JSONObject(response);
+                            boolean success = jsonResponse.getBoolean("success");
+                            if (success) {
+                                android.app.AlertDialog dialog;
+                                android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(RideFragment.this.getActivity());
+                                dialog = builder.setMessage("라이더 등록 선공.")
+                                        .setPositiveButton("확인", null)
+                                        .create();
+                                dialog.show();
+                            } else {
+                                android.app.AlertDialog dialog;
+                                android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(RideFragment.this.getActivity());
+                                dialog = builder.setMessage("오류.")
+                                        .setPositiveButton("확인", null)
+                                        .create();
+                                dialog.show();
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                };
+                RiderRequest rideRegisterRequest = new RiderRequest(userID, responseListener);
+                RequestQueue queue = Volley.newRequestQueue(RideFragment.this.getActivity());
+                queue.add(rideRegisterRequest);
+            }
+        });
+
+        Button requestCancelRideButton = (Button) getView().findViewById(R.id.requestCancelRide);
+        requestCancelRideButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final String userID = MainActivity.userID;
+
+                Response.Listener<String> responseListener = new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            JSONObject jsonResponse = new JSONObject(response);
+                            boolean success = jsonResponse.getBoolean("success");
+                            if (success) {
+                                android.app.AlertDialog dialog;
+                                android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(RideFragment.this.getActivity());
+                                dialog = builder.setMessage("라이드 취소 선공.")
+                                        .setPositiveButton("확인", null)
+                                        .create();
+                                dialog.show();
+                            } else {
+                                android.app.AlertDialog dialog;
+                                android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(RideFragment.this.getActivity());
+                                dialog = builder.setMessage("오류.")
+                                        .setPositiveButton("확인", null)
+                                        .create();
+                                dialog.show();
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                };
+                RideCancelRequest rideCancelRequest = new RideCancelRequest(userID, responseListener);
+                RequestQueue queue = Volley.newRequestQueue(RideFragment.this.getActivity());
+                queue.add(rideCancelRequest);
+            }
+        });
+
+
+        Button requestRideButton = (Button) getView().findViewById(R.id.requestRide);
+        requestRideButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final String userID = MainActivity.userID;
+
+                Response.Listener<String> responseListener = new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            JSONObject jsonResponse = new JSONObject(response);
+                            boolean success = jsonResponse.getBoolean("success");
+                            if (success) {
+                                android.app.AlertDialog dialog;
+                                android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(RideFragment.this.getActivity());
+                                dialog = builder.setMessage("라이드 신청 선공.")
+                                        .setPositiveButton("확인", null)
+                                        .create();
+                                dialog.show();
+                            } else {
+                                android.app.AlertDialog dialog;
+                                android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(RideFragment.this.getActivity());
+                                dialog = builder.setMessage("라이드 이미 신청 했습니다.")
+                                        .setPositiveButton("확인", null)
+                                        .create();
+                                dialog.show();
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                };
+                RideRequest rideRequest = new RideRequest(userID, responseListener);
+                RequestQueue queue = Volley.newRequestQueue(RideFragment.this.getActivity());
+                queue.add(rideRequest);
+            }
+        });
+    }
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_ride, container, false);
     }
+
+
 }
