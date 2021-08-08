@@ -1,5 +1,6 @@
 package com.example.mainactivity;
 
+import android.Manifest;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -84,6 +85,41 @@ public class RideFragment extends Fragment {
     @Override
     public void onActivityCreated(Bundle b) {
         super.onActivityCreated(b);
+
+        Button rideQueueResetButton = (Button) getView().findViewById(R.id.rideQueueReset);
+        rideQueueResetButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final String userID = MainActivity.userID;
+                MainActivity.rideQueue.clear();
+                System.out.println(MainActivity.rideQueue.getAl().size());
+                android.app.AlertDialog dialog;
+                android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(RideFragment.this.getActivity());
+                dialog = builder.setMessage("라이드 서비스 리셋 완료.")
+                        .setPositiveButton("확인", null)
+                        .create();
+                dialog.show();
+
+            }
+        });
+
+        Button rideQueueStartButton = (Button) getView().findViewById(R.id.rideQueueStart);
+        rideQueueStartButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final String userID = MainActivity.userID;
+                MainActivity.rideQueue.update();
+                MainActivity.rideQueue.fill();
+                System.out.println(MainActivity.rideQueue.getAl().size());
+                android.app.AlertDialog dialog;
+                android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(RideFragment.this.getActivity());
+                dialog = builder.setMessage("라이드 서비스 시작 완료.")
+                        .setPositiveButton("확인", null)
+                        .create();
+                dialog.show();
+
+            }
+        });
 
         Button registerCancelRiderButton = (Button) getView().findViewById(R.id.registerRiderCancel);
         registerCancelRiderButton.setOnClickListener(new View.OnClickListener() {
@@ -174,6 +210,7 @@ public class RideFragment extends Fragment {
                             JSONObject jsonResponse = new JSONObject(response);
                             boolean success = jsonResponse.getBoolean("success");
                             if (success) {
+                                System.out.println(MainActivity.rideQueue.getAl().size());
                                 android.app.AlertDialog dialog;
                                 android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(RideFragment.this.getActivity());
                                 dialog = builder.setMessage("라이드 취소 선공.")
@@ -213,6 +250,9 @@ public class RideFragment extends Fragment {
                             JSONObject jsonResponse = new JSONObject(response);
                             boolean success = jsonResponse.getBoolean("success");
                             if (success) {
+                                MainActivity.rideQueue.found = false;
+                                MainActivity.rideQueue.addIn(MainActivity.userID);
+                                MainActivity.rideQueue.printAll();
                                 android.app.AlertDialog dialog;
                                 android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(RideFragment.this.getActivity());
                                 dialog = builder.setMessage("라이드 신청 선공.")

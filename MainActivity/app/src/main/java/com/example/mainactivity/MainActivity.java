@@ -9,6 +9,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -22,7 +23,9 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 
 import javax.net.ssl.HttpsURLConnection;
 
@@ -32,6 +35,13 @@ public class MainActivity extends AppCompatActivity {
     private NoticeListAdapter adapter;
     private List<Notice> noticeList;
     public static String userID;
+
+    public static RideQueue rideQueue = new RideQueue();
+
+    EditText mEditText;
+    Queue<String> queue = new LinkedList<>();
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
